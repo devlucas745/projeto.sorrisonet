@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Pagamento aprovado — SorrisoNet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="logotipo_sorriso_net_azul_claro-removebg-preview.png" alt="SorrisoNet">
+      </a>
+      <button class="btn-primary" onclick="location.href='assinatura.html'">ASSINE JÁ</button>
+      <div class="search"><input type="search" placeholder="Digite sua pesquisa" /></div>
+      <nav class="main-nav">
+        <a href="area-assinante.html">ÁREA DO ASSINANTE</a>
+        <a href="planos.html">PLANOS</a>
+        <a href="agenda_doutores.html">GERENCIAMENTO</a>
+        <a href="contato.html">FALE CONOSCO</a>
+  <a id="btnLoginLogout" href="login.html">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding:48px 0; text-align:center;">
+    <h1 style="color:var(--primary);">Pagamento aprovado! 🎉</h1>
+    <p>Obrigado por assinar a SorrisoNet. Sua assinatura foi confirmada com sucesso.</p>
+    <button class="auth-btn" onclick="location.href='area-assinante.html'" style="max-width:260px; margin:16px auto 0;">Ir para Área do Assinante</button>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© SorrisoNet — Trabalho acadêmico</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('btnLoginLogout');
+
+  // se o botão existir
+  if (btn) {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      // se estiver logado
+      btn.textContent = 'Sair';
+      btn.href = '#';
+      btn.onclick = () => {
+        logout();
+      };
+    } else {
+      // se não estiver logado
+      btn.textContent = 'Login';
+      btn.href = 'login.html';
+    }
+  }
+});
+</script>
+</body>
+</html>
+
+</body>
+</html>

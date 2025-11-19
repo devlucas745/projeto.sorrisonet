@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Configurações — SorrisoNet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- TOPO -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="logotipo_sorriso_net_azul_claro-removebg-preview.png" alt="SorrisoNet">
+      </a>
+      <button class="btn-primary" onclick="location.href='assinatura.html'">ASSINE JÁ</button>
+      <div class="search"><input type="search" placeholder="Digite sua pesquisa" /></div>
+      <nav class="main-nav">
+        <a href="area-assinante.html">ÁREA DO ASSINANTE</a>
+        <a href="planos.html">PLANOS</a>
+        <a href="agenda_doutores.html">GERENCIAMENTO</a>
+        <a href="contato.html">FALE CONOSCO</a>
+<a href="#" onclick="logout()" class="bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-lg text-sm hover:bg-gray-300 transition">
+  Sair
+</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="container" style="padding:32px 0">
+    <h1 style="color:var(--primary); margin-bottom:6px;">Configurações da Conta</h1>
+    <p style="margin-top:0; color:#555;">Gerencie seus dados pessoais, privacidade, segurança e preferências.</p>
+
+    <div class="settings-grid">
+      <!-- DADOS PESSOAIS -->
+      <section class="card">
+        <div class="card-head">
+          <h2>Dados pessoais</h2>
+          <button id="btn-salvar-dados" class="btn-sec">Salvar</button>
+        </div>
+        <form id="form-dados" class="grid2">
+          <div>
+            <label for="nome">Nome completo</label>
+            <input type="text" id="nome" name="nome" placeholder="Seu nome">
+          </div>
+          <div>
+            <label for="cpf">CPF</label>
+            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00">
+          </div>
+          <div>
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" placeholder="voce@email.com">
+          </div>
+          <div>
+            <label for="telefone">Telefone</label>
+            <input type="tel" id="telefone" name="telefone" placeholder="(11) 90000-0000">
+          </div>
+          <div class="full">
+            <label for="endereco">Endereço</label>
+            <input type="text" id="endereco" name="endereco" placeholder="Rua, número, complemento, cidade/UF">
+          </div>
+        </form>
+        <small class="hint">Somente você e a equipe SorrisoNet têm acesso a estes dados, conforme sua autorização.</small>
+      </section>
+
+      <!-- PRIVACIDADE -->
+      <section class="card">
+        <div class="card-head">
+          <h2>Privacidade</h2>
+          <button id="btn-salvar-priv" class="btn-sec">Salvar</button>
+        </div>
+        <div class="privacy-list">
+          <label class="switch-row">
+            <span>Permitir uso de dados para melhoria do serviço</span>
+            <input type="checkbox" id="priv_melhoria">
+          </label>
+          <label class="switch-row">
+            <span>Compartilhar histórico com outros profissionais da rede</span>
+            <input type="checkbox" id="priv_compartilhar">
+          </label>
+          <label class="switch-row">
+            <span>Exibir lembretes automáticos de consulta</span>
+            <input type="checkbox" id="priv_lembretes">
+          </label>
+        </div>
+        <small class="hint">Você pode alterar essas permissões a qualquer momento.</small>
+      </section>
+
+      <!-- SEGURANÇA -->
+      <section class="card">
+        <div class="card-head">
+          <h2>Segurança</h2>
+          <button id="btn-salvar-senha" class="btn-sec">Atualizar senha</button>
+        </div>
+        <form id="form-senha" class="grid2">
+          <div>
+            <label for="senha_atual">Senha atual</label>
+            <input type="password" id="senha_atual" placeholder="••••••••">
+          </div>
+          <div>
+            <label for="senha_nova">Nova senha</label>
+            <input type="password" id="senha_nova" placeholder="Mínimo 8 caracteres">
+          </div>
+          <div class="full">
+            <label for="senha_confirma">Confirmar nova senha</label>
+            <input type="password" id="senha_confirma" placeholder="Repita a nova senha">
+          </div>
+        </form>
+        <small class="hint">Dica: use letras maiúsculas, minúsculas, números e símbolos.</small>
+      </section>
+
+      <!-- NOTIFICAÇÕES -->
+      <section class="card">
+        <div class="card-head">
+          <h2>Notificações</h2>
+          <button id="btn-salvar-notif" class="btn-sec">Salvar</button>
+        </div>
+        <div class="privacy-list">
+          <label class="switch-row">
+            <span>Receber lembretes por e-mail</span>
+            <input type="checkbox" id="notif_email" checked>
+          </label>
+          <label class="switch-row">
+            <span>Receber lembretes por SMS</span>
+            <input type="checkbox" id="notif_sms">
+          </label>
+          <label class="switch-row">
+            <span>Receber novidades e promoções</span>
+            <input type="checkbox" id="notif_marketing">
+          </label>
+        </div>
+      </section>
+
+      <!-- ENCERRAR CONTA -->
+      <section class="card danger-zone">
+        <h2 style="margin-top:0;">Encerrar conta</h2>
+        <p style="color:#6a6a6a;">Esta ação é irreversível. Todos os seus dados serão removidos de forma permanente (simulado).</p>
+        <button id="btn-excluir" class="btn-danger">Excluir minha conta</button>
+      </section>
+    </div>
+
+    <!-- Caixa de confirmação -->
+    <section id="ok-box" class="card ok-box" style="display:none; margin-top:16px;">
+      <h2 style="margin:0 0 6px 0; color:#0e7a3a;">Configurações salvas!</h2>
+      <p style="margin:0; color:#444;">Suas preferências foram atualizadas.</p>
+    </section>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© SorrisoNet — Trabalho acadêmico</p>
+    </div>
+  </footer>
+
+  <!-- JS DEMO (salva no localStorage para simular persistência) -->
+  <script>
+    // Utilidades simples
+    const $ = (id) => document.getElementById(id);
+    const okBox = $('ok-box');
+
+    function showOK(msg='Configurações salvas!'){
+      okBox.style.display = 'block';
+      okBox.querySelector('p').textContent = msg;
+      window.scrollTo({ top: okBox.offsetTop - 20, behavior:'smooth' });
+      setTimeout(()=> okBox.style.display='none', 2500);
+    }
+
+    // Carrega valores do localStorage (simulação)
+    function loadData(){
+      try{
+        const dados = JSON.parse(localStorage.getItem('cfg_dados') || '{}');
+        ['nome','cpf','email','telefone','endereco'].forEach(k=>{
+          if(dados[k]) $(k).value = dados[k];
+        });
+
+        const priv = JSON.parse(localStorage.getItem('cfg_priv') || '{}');
+        $('priv_melhoria').checked   = !!priv.melhoria;
+        $('priv_compartilhar').checked = !!priv.compartilhar;
+        $('priv_lembretes').checked  = !!priv.lembretes;
+
+        const notif = JSON.parse(localStorage.getItem('cfg_notif') || '{}');
+        $('notif_email').checked    = notif.email ?? true;
+        $('notif_sms').checked      = !!notif.sms;
+        $('notif_marketing').checked= !!notif.marketing;
+      }catch(e){}
+    }
+
+    // Salvar dados pessoais
+    $('btn-salvar-dados').addEventListener('click', ()=>{
+      const payload = {
+        nome: $('nome').value.trim(),
+        cpf: $('cpf').value.trim(),
+        email: $('email').value.trim(),
+        telefone: $('telefone').value.trim(),
+        endereco: $('endereco').value.trim(),
+      };
+      localStorage.setItem('cfg_dados', JSON.stringify(payload));
+      showOK('Dados pessoais atualizados!');
+    });
+
+    // Salvar privacidade
+    $('btn-salvar-priv').addEventListener('click', ()=>{
+      const payload = {
+        melhoria: $('priv_melhoria').checked,
+        compartilhar: $('priv_compartilhar').checked,
+        lembretes: $('priv_lembretes').checked,
+      };
+      localStorage.setItem('cfg_priv', JSON.stringify(payload));
+      showOK('Preferências de privacidade salvas!');
+    });
+
+    // Atualizar senha (simulado)
+    $('btn-salvar-senha').addEventListener('click', ()=>{
+      const atual = $('senha_atual').value;
+      const nova = $('senha_nova').value;
+      const conf = $('senha_confirma').value;
+      if(!nova || nova.length < 8) return alert('A nova senha deve ter no mínimo 8 caracteres.');
+      if(nova !== conf) return alert('A confirmação da senha não confere.');
+      // Aqui faria POST /api/alterar-senha com {atual, nova}
+      $('form-senha').reset();
+      showOK('Senha atualizada com sucesso!');
+    });
+
+    // Salvar notificações
+    $('btn-salvar-notif').addEventListener('click', ()=>{
+      const payload = {
+        email: $('notif_email').checked,
+        sms: $('notif_sms').checked,
+        marketing: $('notif_marketing').checked,
+      };
+      localStorage.setItem('cfg_notif', JSON.stringify(payload));
+      showOK('Preferências de notificações salvas!');
+    });
+
+    // Excluir conta (simulado)
+    $('btn-excluir').addEventListener('click', ()=>{
+      if(confirm('Tem certeza que deseja excluir sua conta? Esta ação é irreversível.')){
+        localStorage.clear();
+        alert('Conta excluída (simulado). Você será redirecionado para o início.');
+        location.href = 'index.html';
+      }
+    });
+
+    // Inicializa
+    loadData();
+  </script>
+</body>
+</html>

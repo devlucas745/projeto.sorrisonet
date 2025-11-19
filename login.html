@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Login — SorrisoNet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- TOPO -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="logotipo_sorriso_net_azul_claro-removebg-preview.png" alt="SorrisoNet">
+      </a>
+      <button class="btn-primary" onclick="location.href='assinatura.html'">ASSINE JÁ</button>
+      <div class="search"><input type="search" placeholder="Digite sua pesquisa" /></div>
+      <nav class="main-nav">
+        <a href="area-assinante.html">ÁREA DO ASSINANTE</a>
+        <a href="planos.html">PLANOS</a>
+        <a href="agenda_doutores.html">GERENCIAMENTO</a>
+        <a href="contato.html">FALE CONOSCO</a>
+  <a id="btnLoginLogout" href="login.html">Login</a>
+
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="auth-wrapper">
+    <form id="form-login" class="auth-card" action="area-assinante.html" method="get">
+      <h1>Entrar</h1>
+
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" name="senha" placeholder="••••••••" required>
+
+      <button type="submit" class="auth-btn">Entrar</button>
+
+      <p class="auth-alt">
+        Esqueceu a senha? <a href="redefinir_senha.html">Redefinir</a><br>
+        Ainda não tem conta? <a href="cadastro.html">Cadastre-se</a>
+      </p>
+    </form>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© SorrisoNet — Trabalho acadêmico</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+
+<script>
+const form = document.getElementById('form-login');
+if(form){
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const email = form.email.value.trim();
+    const senha = form.senha.value.trim();
+    try{
+      // faz login e pega token
+      const res = await apiPost('/api/login', { email, senha });
+      setToken(res.token); // guarda o token
+
+      // agora pergunta quem sou eu
+      const me = await apiGet('/api/me', true);
+
+      alert('Login realizado!');
+
+      // decide para onde ir
+      if (me.premium === true) {
+        // assinante: manda pro painel premium
+        location.href = 'area-assinante.html';
+      } else {
+        // não assinante: manda pra página normal / planos
+        location.href = 'planos.html';
+      }
+    }catch(err){
+      alert('Falha no login: verifique e-mail/senha.\nDetalhe: ' + err.message);
+    }
+  });
+}
+</script>
+
+
+  <script src="js/auth.js"></script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('btnLoginLogout');
+    const linkAreaAssinante = document.getElementById('linkAreaAssinante');
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      // Usuário não logado
+      if (btn) {
+        btn.textContent = 'Login';
+        btn.href = 'login.html';
+        btn.onclick = null;
+      }
+      if (linkAreaAssinante) linkAreaAssinante.style.display = 'none';
+      return;
+    }
+
+    // Usuário logado → verificar se é premium
+    apiGet('/api/me', true)
+      .then(me => {
+        if (btn) {
+          btn.textContent = 'Sair';
+          btn.href = '#';
+          btn.onclick = () => logout();
+        }
+
+        if (linkAreaAssinante) {
+          if (me.premium === true) {
+            linkAreaAssinante.style.display = 'inline-block';
+          } else {
+            linkAreaAssinante.style.display = 'none';
+          }
+        }
+      })
+      .catch(() => {
+        clearToken();
+        if (btn) {
+          btn.textContent = 'Login';
+          btn.href = 'login.html';
+          btn.onclick = null;
+        }
+        if (linkAreaAssinante) linkAreaAssinante.style.display = 'none';
+      });
+  });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Agenda dos Doutores — SorrisoNet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- TOPO -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="logotipo_sorriso_net_azul_claro-removebg-preview.png" alt="SorrisoNet">
+      </a>
+      <button class="btn-primary" onclick="location.href='assinatura.html'">ASSINE JÁ</button>
+      <div class="search"><input type="search" placeholder="Digite sua pesquisa" /></div>
+      <nav class="main-nav">
+        <a href="area-assinante.html">ÁREA DO ASSINANTE</a>
+        <a href="planos.html">PLANOS</a>
+        <a href="agenda_doutores.html">GERENCIAMENTO</a>
+        <a href="contato.html">FALE CONOSCO</a>
+        <a id="btnLoginLogout" href="#" onclick="logout()">Sair</a>
+
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="container" style="padding:32px 0">
+    <h1 style="color:var(--primary); margin-bottom:6px;">Agenda dos Doutores</h1>
+    <p style="margin-top:0; color:#555;">Visualize a semana de atendimentos por profissional. Use os botões para navegar entre semanas.</p>
+
+    <!-- CONTROLES -->
+    <section class="card" style="margin-bottom:16px;">
+      <div class="week-bar">
+        <div class="left">
+          <label for="sel-doutor" class="lbl">Doutor(a)</label>
+          <select id="sel-doutor">
+            <option>Dra. Ana Silva</option>
+            <option>Dr. Bruno Lima</option>
+            <option>Dra. Carla Mendes</option>
+          </select>
+        </div>
+
+        <div class="center">
+          <button type="button" class="btn-sec" id="btn-prev">← Semana anterior</button>
+          <strong id="week-label" class="week-label">—</strong>
+          <button type="button" class="btn-sec" id="btn-next">Próxima semana →</button>
+        </div>
+
+        <div class="right">
+          <button type="button" class="btn-sec" id="btn-print">Imprimir / PDF</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALENDÁRIO SEMANAL -->
+    <section class="card">
+      <div class="calendar-week" id="calendar-week">
+        <!-- As 7 colunas são criadas pelo JS -->
+      </div>
+    </section>
+
+    <!-- PRÓXIMOS ATENDIMENTOS (lista) -->
+    <section class="card" style="margin-top:16px;">
+      <div class="flex-between">
+        <h2>Próximos atendimentos</h2>
+        <small id="count-proximos" style="color:#666;"></small>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Hora</th>
+              <th>Profissional</th>
+              <th>Procedimento</th>
+              <th>Paciente</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-proximos">
+            <!-- Linhas via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© SorrisoNet — Trabalho acadêmico</p>
+    </div>
+  </footer>
+
+  <!-- JS (DEMO FRONT) -->
+  <script>
+    // === Dados de exemplo (substituiremos por API depois) ===
+    const eventos = [
+      // Ana
+      { dt: '2025-10-27T09:00', doutor:'Dra. Ana Silva',  tipo:'Consulta',   paciente:'Mariana S.', status:'Agendado' },
+      { dt: '2025-10-27T11:00', doutor:'Dra. Ana Silva',  tipo:'Restauração',paciente:'Paulo R.',   status:'Agendado' },
+      { dt: '2025-10-28T15:30', doutor:'Dra. Ana Silva',  tipo:'Limpeza',    paciente:'Julia P.',   status:'Agendado' },
+      { dt: '2025-10-30T10:30', doutor:'Dra. Ana Silva',  tipo:'Ortodontia', paciente:'Lucas M.',   status:'Concluído' },
+
+      // Bruno
+      { dt: '2025-10-27T14:00', doutor:'Dr. Bruno Lima',  tipo:'Consulta',   paciente:'Rita C.',    status:'Agendado' },
+      { dt: '2025-10-28T09:30', doutor:'Dr. Bruno Lima',  tipo:'Limpeza',    paciente:'Diego B.',   status:'Agendado' },
+      { dt: '2025-10-29T16:00', doutor:'Dr. Bruno Lima',  tipo:'Restauração',paciente:'André H.',   status:'Cancelado' },
+
+      // Carla
+      { dt: '2025-10-29T10:00', doutor:'Dra. Carla Mendes',tipo:'Consulta',  paciente:'Priscila T.', status:'Agendado' },
+      { dt: '2025-10-30T11:30', doutor:'Dra. Carla Mendes',tipo:'Ortodontia',paciente:'Henrique L.', status:'Agendado' },
+      { dt: '2025-11-01T09:00', doutor:'Dra. Carla Mendes',tipo:'Limpeza',   paciente:'Nayara F.',   status:'Agendado' },
+    ];
+
+    const diasSemana = ['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+
+    // === Elementos ===
+    const selDoutor = document.getElementById('sel-doutor');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const lblWeek = document.getElementById('week-label');
+    const calWeek = document.getElementById('calendar-week');
+    const tbodyProx = document.getElementById('tbody-proximos');
+    const countProx = document.getElementById('count-proximos');
+    const btnPrint = document.getElementById('btn-print');
+
+    // === Estado da tela ===
+    let current = new Date();             // hoje
+    let weekStart = getMonday(current);   // segunda da semana atual
+
+    function getMonday(d){
+      const x = new Date(d);
+      const day = x.getDay(); // 0-dom,1-seg
+      const diff = (day === 0 ? -6 : 1 - day); // leva para segunda
+      x.setDate(x.getDate() + diff);
+      x.setHours(0,0,0,0);
+      return x;
+    }
+
+    function addDays(d, n){
+      const x = new Date(d);
+      x.setDate(x.getDate()+n);
+      return x;
+    }
+
+    function fmtDateBR(date){
+      const dd = String(date.getDate()).padStart(2,'0');
+      const mm = String(date.getMonth()+1).padStart(2,'0');
+      const yyyy = date.getFullYear();
+      return `${dd}/${mm}/${yyyy}`;
+    }
+    function fmtTimeHM(date){
+      const hh = String(date.getHours()).padStart(2,'0');
+      const mm = String(date.getMinutes()).padStart(2,'0');
+      return `${hh}:${mm}`;
+    }
+    function sameDay(a,b){
+      return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+    }
+
+    function rangeWeek(ws){
+      return Array.from({length:7}, (_,i)=> addDays(ws, i));
+    }
+
+    function render(){
+      // Label tipo "20–26/10/2025"
+      const days = rangeWeek(weekStart);
+      const first = days[0], last = days[6];
+      lblWeek.textContent = `${fmtDateBR(first)} — ${fmtDateBR(last)}`;
+
+      // Monta as 7 colunas
+      calWeek.innerHTML = '';
+      days.forEach((day,i)=>{
+        const col = document.createElement('div');
+        col.className = 'day-col';
+        col.innerHTML = `
+          <div class="day-head">
+            <strong>${diasSemana[i]}</strong>
+            <span>${fmtDateBR(day)}</span>
+          </div>
+          <div class="day-body" id="day-${i}"></div>
+        `;
+        calWeek.appendChild(col);
+      });
+
+      // Filtra por doutor selecionado e por semana
+      const doutor = selDoutor.value;
+      const begin = days[0].toISOString().slice(0,10);
+      const end   = days[6].toISOString().slice(0,10);
+
+      const semanaEventos = eventos.filter(ev=>{
+        if(ev.doutor !== doutor) return false;
+        const d = ev.dt.slice(0,10);
+        return d >= begin && d <= end;
+      }).sort((a,b)=> a.dt.localeCompare(b.dt));
+
+      // Renderiza cards nos dias
+      semanaEventos.forEach(ev=>{
+        const dt = new Date(ev.dt);
+        const idx = days.findIndex(d => sameDay(d, dt));
+        if(idx<0) return;
+        const host = document.getElementById(`day-${idx}`);
+        const card = document.createElement('div');
+        card.className = `event-chip st-${ev.status.toLowerCase()}`;
+        card.innerHTML = `
+          <div class="ev-time">${fmtTimeHM(dt)}</div>
+          <div class="ev-info">
+            <div class="ev-title">${ev.tipo}</div>
+            <div class="ev-sub">${ev.paciente}</div>
+          </div>
+          <span class="ev-status">${ev.status}</span>
+        `;
+        host.appendChild(card);
+      });
+
+      // Próximos atendimentos (a partir de hoje)
+      const hoje = new Date(); hoje.setHours(0,0,0,0);
+      const proximos = eventos
+        .filter(ev => ev.doutor===doutor && new Date(ev.dt) >= hoje)
+        .sort((a,b)=> a.dt.localeCompare(b.dt))
+        .slice(0, 10);
+
+      tbodyProx.innerHTML = '';
+      proximos.forEach(ev=>{
+        const d = new Date(ev.dt);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${fmtDateBR(d)}</td>
+          <td>${fmtTimeHM(d)}</td>
+          <td>${ev.doutor}</td>
+          <td>${ev.tipo}</td>
+          <td>${ev.paciente}</td>
+          <td><span class="tag tag-${ev.status.toLowerCase()}">${ev.status}</span></td>
+        `;
+        tbodyProx.appendChild(tr);
+      });
+      countProx.textContent = `${proximos.length} registro(s) futuro(s)`;
+    }
+
+    // Navegação de semana
+    btnPrev.addEventListener('click', ()=>{
+      weekStart = addDays(weekStart, -7);
+      render();
+    });
+    btnNext.addEventListener('click', ()=>{
+      weekStart = addDays(weekStart, 7);
+      render();
+    });
+    selDoutor.addEventListener('change', render);
+
+    // Imprimir/PDF
+    btnPrint.addEventListener('click', ()=> window.print());
+
+    // Inicializa
+    render();
+  </script>
+
+  <!-- Funções de API: getToken, setToken, clearToken... -->
+<script src="js/api.js"></script>
+
+<!-- Funções de login/logout e requireLogin -->
+<script src="js/auth.js"></script>
+
+<!-- Proteção da página (se essa tela for privada, tipo gerenciamento do paciente) -->
+<script>
+  requireLogin();
+</script>
+</body>
+</html>
+
+</body>
+</html>

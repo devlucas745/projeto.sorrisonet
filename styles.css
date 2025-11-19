@@ -1,0 +1,63 @@
+:root {
+  /* Definição de Variáveis CSS (Custom Properties) para manter um esquema de cores consistente e fácil de modificar. */
+  --primary-color: #138aec;
+  --dark-blue: #0d2c4f;
+  --light-blue: #e0f2fe;
+  --accent-pink: #ec4899;
+}
+
+/* Classe customizada para dar destaque a um elemento, como o botão "PLANOS". */
+/* Cabeçalho */
+header {
+  background-color: #fff;   /* branco */
+  color: #000;              /* texto preto */
+  padding: 10px 20px;
+}
+
+/* Links do cabeçalho */
+header a {
+  color: #000;              /* links pretos */
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+/* Links ao passar o mouse */
+header a:hover {
+  color: var(--primary-color); /* fica azul no hover */
+
+  :root {
+  --primary-color: #138aec; /* Azul do ASSINE JÁ */
+  --text-color: #ffffff;    /* Cor do texto */
+}
+
+/* Botão ASSINE JÁ */
+.btn-assine {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+/* Botão LOGIN e barra de pesquisa */
+.btn-login,
+.search {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+}
+
+/* Para o input de pesquisa placeholder branco */
+.search::placeholder {
+  color: var(--text-color);
+  opacity: 1; /* garante que fique visível */
+}
+
+}
+
+  
+  
+
+

@@ -1,0 +1,97 @@
+{
+  "users": [
+    {
+      "id": "u1",
+      "nome": "Teste",
+      "email": "teste@ex.com",
+      "senha": "123",
+      "cpf": "000.000.000-00",
+      "telefone": "",
+      "endereco": ""
+    },
+    {
+      "id": "f4db91c3-a9df-433b-af82-b3f83e6f551b",
+      "nome": "Caio Avila Martins",
+      "email": "caioavilamartins@gmail.com",
+      "senha": "1234",
+      "cpf": "48755777880",
+      "telefone": "11989089463",
+      "endereco": "Rua Zavuvus, 48",
+      "premium": true
+    },
+    {
+      "id": "a873d4b8-4d5b-4198-8ece-03a642b9d40f",
+      "nome": "Renato Martins",
+      "email": "Renatom@gmail.com",
+      "senha": "1234",
+      "cpf": "22372184806",
+      "telefone": "11989088466",
+      "endereco": "Rua Zavuvus, 48",
+      "premium": true
+    },
+    {
+      "id": "572f1ef6-53c9-406b-9d70-337ad7e2a524",
+      "nome": "Ana Julia",
+      "email": "Anajuliasb7@gmail.com",
+      "senha": "1234",
+      "cpf": "48460437899",
+      "telefone": "11960293266",
+      "endereco": "Rua Zavuvus, 48",
+      "premium": true
+    },
+    {
+      "id": "cd86a5c9-c7f5-4801-8c26-0343b9d799d1",
+      "nome": "caio2",
+      "email": "caioavilamartins2@gmail.com",
+      "senha": "1234",
+      "cpf": "48755777880",
+      "telefone": "11989089463",
+      "endereco": "Casa",
+      "premium": true
+    },
+    {
+      "id": "6b33cedb-ccb0-4a33-b7ae-d6fa65f95026",
+      "nome": "Caio Avila Martins3",
+      "email": "caioavilamartins3@gmail.com",
+      "senha": "1234",
+      "cpf": "48755777880",
+      "telefone": "11989089463",
+      "endereco": "Rua Zavuvus, 48",
+      "premium": true
+    },
+    {
+      "id": "2703d03e-98ae-44cd-99bb-cd5ad185cf95",
+      "nome": "Caio Avila Martins",
+      "email": "caioavilamartins4@gmail.com",
+      "senha": "1234",
+      "cpf": "48755777880",
+      "telefone": "11989089463",
+      "endereco": "Rua Zavuvus, 48",
+      "premium": true
+    },
+    {
+      "id": "ad6b24eb-04a2-43c9-b633-1c5f1730380f",
+      "nome": "Caio Avila Martins5",
+      "email": "caioavilamartins5@gmail.com",
+      "senha": "1234",
+      "cpf": "48755777880",
+      "telefone": "11989089463",
+      "endereco": "Rua Zavuvus, 48",
+      "premium": true
+    }
+  ],
+  "agendamentos": [
+    {
+      "id": "a1",
+      "data": "2025-10-25",
+      "hora": "09:00",
+      "profissional": "Dra. Ana Silva",
+      "procedimento": "Consulta",
+      "status": "Agendado",
+      "userId": "u1"
+    }
+  ],
+  "contatos": [],
+  "assinaturas": [],
+  "resetTokens": []
+}

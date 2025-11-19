@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Planos — SorrisoNet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- TOPO -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="logotipo_sorriso_net_azul_claro-removebg-preview.png" alt="SorrisoNet">
+      </a>
+
+      <button class="btn-primary" onclick="location.href='assinatura.html'">ASSINE JÁ</button>
+
+      <div class="search">
+        <input type="search" placeholder="Digite sua pesquisa" />
+      </div>
+
+      <nav class="main-nav">
+        <a href="area-assinante.html">ÁREA DO ASSINANTE</a>
+        <a href="planos.html">PLANOS</a>
+        <a href="agenda_doutores.html">GERENCIAMENTO</a>
+        <a href="contato.html">FALE CONOSCO</a>
+        <a id="btnLoginLogout" href="login.html">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO ESPECÍFICO -->
+  <main class="container" style="padding:48px 0">
+    <h1 style="text-align:center; margin-bottom:40px;">
+      Escolha o plano ideal para você
+    </h1>
+
+    <section class="planos-grid">
+
+      <!-- PLANO BÁSICO -->
+      <div class="plano-card">
+        <h2>Plano Básico</h2>
+        <p>Perfeito para quem busca um cuidado essencial com economia.</p>
+        <ul>
+          <li>✔ Limpeza e avaliação anual</li>
+          <li>✔ Descontos em procedimentos</li>
+          <li>✔ Suporte via telefone</li>
+        </ul>
+        <p class="preco">R$ 99/mês</p>
+        <button
+          data-assinar="Basico"
+          class="btn-assinar"
+        >
+          Assinar
+        </button>
+      </div>
+
+      <!-- PLANO PREMIUM -->
+      <div class="plano-card destaque">
+        <h2>Plano Premium</h2>
+        <p>Mais conforto e flexibilidade com cobertura ampliada.</p>
+        <ul>
+          <li>✔ Todas as vantagens do Plano Básico</li>
+          <li>✔ Atendimento prioritário</li>
+          <li>✔ Consultas ilimitadas</li>
+        </ul>
+        <p class="preco">R$ 149/mês</p>
+        <button
+          data-assinar="Premium"
+          class="btn-assinar"
+        >
+          Assinar
+        </button>
+      </div>
+
+      <!-- PLANO FAMÍLIA -->
+      <div class="plano-card">
+        <h2>Plano Família</h2>
+        <p>Para quem quer cuidar de todos da casa com desconto.</p>
+        <ul>
+          <li>✔ Até 4 dependentes</li>
+          <li>✔ Atendimento domiciliar</li>
+          <li>✔ Cobertura completa</li>
+        </ul>
+        <p class="preco">R$ 249/mês</p>
+        <button
+          data-assinar="Familia"
+          class="btn-assinar"
+        >
+          Assinar
+        </button>
+      </div>
+    </section>
+
+    <!-- mensagem opcional -->
+    <p id="statusAssinatura"
+       style="text-align:center; margin-top:24px; font-size:14px; color:#555;">
+    </p>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© SorrisoNet — Trabalho acadêmico</p>
+    </div>
+  </footer>
+
+  <!-- scripts -->
+ <script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const msgStatus      = document.getElementById('statusAssinatura'); // o <p> verde no meio da página
+  const btnAssineJa    = document.querySelector('.btn-primary');      // botão azul grande "ASSINE JÁ" no topo
+  const btnLoginLogout = document.getElementById('btnLoginLogout');   // link "Login" no topo
+
+  // essa função deixa o header correto
+  function aplicarHeaderLogado() {
+    if (!btnLoginLogout) return;
+    btnLoginLogout.textContent = 'Sair';
+    btnLoginLogout.href = '#';
+    btnLoginLogout.onclick = () => {
+      logout(); // vem do auth.js
+    };
+  }
+
+  function aplicarHeaderDeslogado() {
+    if (!btnLoginLogout) return;
+    btnLoginLogout.textContent = 'Login';
+    btnLoginLogout.href = 'login.html';
+    btnLoginLogout.onclick = null;
+  }
+
+  // tenta descobrir quem é o usuário logado
+  let me = null;
+  try {
+    // tenta chamar /api/me mandando token manualmente
+    // (não uso requireLogin aqui porque em "planos" a pessoa pode estar deslogada e tudo bem)
+    const resp = await fetch('http://localhost:3000/api/me', {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      }
+    });
+
+    if (resp.ok) {
+      me = await resp.json(); // {id, nome, email, premium: true/false, ...}
+    }
+  } catch (err) {
+    console.warn('Não consegui buscar /api/me (talvez sem login ainda):', err);
+  }
+
+  // agora decidimos o que mostrar com base nisso:
+
+  if (me) {
+    // usuário LOGADO
+    aplicarHeaderLogado(); // troca "Login" -> "Sair"
+
+    if (me.premium === true) {
+      // já é premium
+      if (msgStatus) {
+        msgStatus.textContent = 'Você já é Premium 😎';
+        msgStatus.style.color = 'green';
+        msgStatus.style.fontWeight = '600';
+        msgStatus.style.textAlign = 'center';
+      }
+
+      // esconde botão ASSINE JÁ do topo
+      if (btnAssineJa) {
+        btnAssineJa.style.display = 'none';
+      }
+    } else {
+      // logado mas NÃO premium ainda
+      // mostra o botão ASSINE JÁ (ele pode assinar)
+      if (btnAssineJa) {
+        btnAssineJa.style.display = '';
+      }
+      if (msgStatus) {
+        msgStatus.textContent = ''; // não mostra nada aqui
+      }
+    }
+
+  } else {
+    // usuário NÃO LOGADO
+    aplicarHeaderDeslogado(); // deixa "Login"
+    // mantém "ASSINE JÁ" visível porque queremos incentivar ele a assinar depois que logar
+    if (btnAssineJa) {
+        btnAssineJa.style.display = '';
+    }
+    if (msgStatus) {
+      msgStatus.textContent = ''; // nada
+    }
+  }
+
+  // agora vamos ligar os botões "Assinar" de cada plano:
+  const botoesPlanos = document.querySelectorAll('[data-assinar]');
+  botoesPlanos.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // rota: se não tem login -> manda pro login
+      if (!localStorage.getItem('token')) {
+        alert('Faça login para continuar sua assinatura.');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // tem login -> manda pra tela de checkout (assinatura.html)
+      // se você quiser passar qual plano clicou, podemos mandar via querystring:
+      // assinatura.html?plano=Premium, por exemplo:
+      const planoName = btn.getAttribute('data-assinar') || '';
+      window.location.href = 'assinatura.html?plano=' + encodeURIComponent(planoName);
+    });
+  });
+});
+</script>
+</body>
+</html>
+ 

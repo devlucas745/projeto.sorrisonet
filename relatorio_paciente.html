@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Relatórios — SorrisoNet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- TOPO -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="logotipo_sorriso_net_azul_claro-removebg-preview.png" alt="SorrisoNet">
+      </a>
+      <button class="btn-primary" onclick="location.href='assinatura.html'">ASSINE JÁ</button>
+      <div class="search"><input type="search" placeholder="Digite sua pesquisa" /></div>
+      <nav class="main-nav">
+        <a href="area-assinante.html">ÁREA DO ASSINANTE</a>
+        <a href="planos.html">PLANOS</a>
+        <a href="agenda_doutores.html">GERENCIAMENTO</a>
+        <a href="contato.html">FALE CONOSCO</a>
+        <a class="login" href="login.html">Sair</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="container" style="padding:32px 0">
+    <h1 style="color:var(--primary); margin-bottom:8px;">Relatórios do Paciente</h1>
+    <p style="color:#555; margin-top:0;">Histórico de consultas, atendimentos e procedimentos. Filtre e exporte.</p>
+
+    <!-- FILTROS -->
+    <section class="card" style="margin-bottom:16px;">
+      <form id="filtros" class="grid-filtros">
+        <div>
+          <label>Data inicial</label>
+          <input type="date" id="data_ini">
+        </div>
+        <div>
+          <label>Data final</label>
+          <input type="date" id="data_fim">
+        </div>
+        <div>
+          <label>Profissional</label>
+          <select id="profissional">
+            <option value="">Todos</option>
+            <option>Dra. Ana Silva</option>
+            <option>Dr. Bruno Lima</option>
+            <option>Dra. Carla Mendes</option>
+          </select>
+        </div>
+        <div>
+          <label>Tipo</label>
+          <select id="tipo">
+            <option value="">Todos</option>
+            <option>Consulta</option>
+            <option>Limpeza</option>
+            <option>Restauração</option>
+            <option>Ortodontia</option>
+          </select>
+        </div>
+        <div>
+          <label>Status</label>
+          <select id="status">
+            <option value="">Todos</option>
+            <option>Agendado</option>
+            <option>Concluído</option>
+            <option>Cancelado</option>
+          </select>
+        </div>
+        <div class="filtros-acoes">
+          <button type="button" class="auth-btn" id="btn-filtrar" style="max-width:180px;">Aplicar filtros</button>
+          <button type="button" class="btn-sec" id="btn-limpar">Limpar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- AÇÕES DO RELATÓRIO -->
+    <section class="flex-between" style="margin: 8px 0 12px 0;">
+      <div></div>
+      <div class="actions">
+        <button type="button" class="btn-sec" id="btn-csv">Exportar CSV</button>
+        <button type="button" class="btn-sec" id="btn-print">Imprimir / PDF</button>
+      </div>
+    </section>
+
+    <!-- TABELA -->
+    <section class="card">
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Hora</th>
+              <th>Profissional</th>
+              <th>Tipo</th>
+              <th>Status</th>
+              <th>Obs.</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-rel">
+            <!-- linhas via JS -->
+          </tbody>
+        </table>
+      </div>
+      <div id="resumo" class="resumo">
+        <!-- resumo via JS -->
+      </div>
+    </section>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© SorrisoNet — Trabalho acadêmico</p>
+    </div>
+  </footer>
+
+  <!-- JS SIMPLES (DEMO) -->
+  <script>
+    // Dados de exemplo (poderiam vir do backend futuramente)
+    const historico = [
+      { data:'2025-10-20', hora:'10:00', profissional:'Dra. Carla Mendes', tipo:'Ortodontia',  status:'Concluído', obs:'Manutenção' },
+      { data:'2025-10-25', hora:'09:00', profissional:'Dra. Ana Silva',   tipo:'Consulta',   status:'Agendado',  obs:'' },
+      { data:'2025-10-26', hora:'14:30', profissional:'Dr. Bruno Lima',   tipo:'Limpeza',    status:'Agendado',  obs:'Primeira visita' },
+      { data:'2025-10-18', hora:'16:00', profissional:'Dra. Ana Silva',   tipo:'Restauração',status:'Cancelado', obs:'Paciente ausente' },
+      { data:'2025-10-10', hora:'11:00', profissional:'Dra. Carla Mendes',tipo:'Ortodontia', status:'Concluído', obs:'' },
+    ];
+
+    const tbody = document.getElementById('tbody-rel');
+    const resumoBox = document.getElementById('resumo');
+
+    const fDataIni = document.getElementById('data_ini');
+    const fDataFim = document.getElementById('data_fim');
+    const fProf = document.getElementById('profissional');
+    const fTipo = document.getElementById('tipo');
+    const fStatus = document.getElementById('status');
+
+    const btnFiltrar = document.getElementById('btn-filtrar');
+    const btnLimpar = document.getElementById('btn-limpar');
+    const btnCSV = document.getElementById('btn-csv');
+    const btnPrint = document.getElementById('btn-print');
+
+    function formatarDataISO(iso){ const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`; }
+
+    function aplicaFiltros(){
+      const ini = fDataIni.value;
+      const fim = fDataFim.value;
+      const prof = fProf.value;
+      const tipo = fTipo.value;
+      const status = fStatus.value;
+
+      return historico.filter(r => {
+        const okDataIni = ini ? r.data >= ini : true;
+        const okDataFim = fim ? r.data <= fim : true;
+        const okProf   = prof ? r.profissional === prof : true;
+        const okTipo   = tipo ? r.tipo === tipo : true;
+        const okStatus = status ? r.status === status : true;
+        return okDataIni && okDataFim && okProf && okTipo && okStatus;
+      });
+    }
+
+    function render(){
+      const dados = aplicaFiltros().sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
+      tbody.innerHTML = '';
+      dados.forEach(r=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${formatarDataISO(r.data)}</td>
+          <td>${r.hora}</td>
+          <td>${r.profissional}</td>
+          <td>${r.tipo}</td>
+          <td><span class="tag tag-${r.status.toLowerCase()}">${r.status}</span></td>
+          <td>${r.obs || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Resumo simples
+      const total = dados.length;
+      const porTipo = countBy(dados, 'tipo');
+      const porStatus = countBy(dados, 'status');
+      resumoBox.innerHTML = `
+        <div class="resumo-grid">
+          <div><strong>Total de registros:</strong> ${total}</div>
+          <div><strong>Por tipo:</strong> ${formatCount(porTipo)}</div>
+          <div><strong>Por status:</strong> ${formatCount(porStatus)}</div>
+        </div>
+      `;
+    }
+
+    function countBy(arr, key){
+      return arr.reduce((acc, x)=>{ acc[x[key]]=(acc[x[key]]||0)+1; return acc; }, {});
+    }
+    function formatCount(obj){
+      const items = Object.entries(obj).map(([k,v])=>`${k}: ${v}`);
+      return items.length? items.join(' · ') : '-';
+    }
+
+    // Exportar CSV
+    function exportCSV(){
+      const dados = aplicaFiltros().sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
+      const header = ['Data','Hora','Profissional','Tipo','Status','Observacoes'];
+      const rows = dados.map(r=>[formatarDataISO(r.data), r.hora, r.profissional, r.tipo, r.status, (r.obs||'')]);
+      const csv = [header, ...rows].map(linha => linha.map(v => `"${(v+'').replace(/"/g,'""')}"`).join(';')).join('\n');
+
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'relatorio_paciente.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Imprimir/PDF
+    function imprimir(){
+      window.print(); // usuário escolhe “Salvar como PDF”
+    }
+
+    btnFiltrar.addEventListener('click', render);
+    btnLimpar.addEventListener('click', ()=>{
+      fDataIni.value = ''; fDataFim.value='';
+      fProf.value=''; fTipo.value=''; fStatus.value='';
+      render();
+    });
+    btnCSV.addEventListener('click', exportCSV);
+    btnPrint.addEventListener('click', imprimir);
+
+    // Inicia
+    render();
+  </script>
+</body>
+</html>

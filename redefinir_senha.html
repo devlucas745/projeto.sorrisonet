@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Redefinir Senha — SorrisoNet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- TOPO -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="logotipo_sorriso_net_azul_claro-removebg-preview.png" alt="SorrisoNet">
+      </a>
+      <button class="btn-primary" onclick="location.href='assinatura.html'">ASSINE JÁ</button>
+      <div class="search"><input type="search" placeholder="Digite sua pesquisa" /></div>
+      <nav class="main-nav">
+        <a href="area-assinante.html">ÁREA DO ASSINANTE</a>
+        <a href="planos.html">PLANOS</a>
+        <a href="agenda_doutores.html">GERENCIAMENTO</a>
+        <a href="contato.html">FALE CONOSCO</a>
+  <a id="btnLoginLogout" href="login.html">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="auth-wrapper">
+    <div class="auth-card" style="max-width:560px;">
+      <h1 style="margin-bottom:12px;">Redefinir senha</h1>
+      <p style="margin-top:0; color:#666;">Vamos enviar um código de verificação para o seu e-mail e, em seguida, você cria uma nova senha.</p>
+
+      <!-- Indicador dos passos -->
+      <div class="steps">
+        <div class="step active" id="step1-ind">1</div>
+        <div class="step-line"></div>
+        <div class="step" id="step2-ind">2</div>
+      </div>
+
+      <!-- PASSO 1: Solicitar e-mail -->
+      <form id="form-email" class="reset-grid">
+        <div class="full">
+          <label for="email">Seu e-mail</label>
+          <input type="email" id="email" name="email" placeholder="voce@email.com" required>
+        </div>
+        <div class="full">
+          <button type="submit" class="auth-btn">Enviar código</button>
+        </div>
+      </form>
+
+      <!-- PASSO 2: Inserir código + nova senha -->
+      <form id="form-nova-senha" class="reset-grid" style="display:none;">
+        <div class="full">
+          <p class="hint" id="hint-email">Enviamos um código para: —</p>
+        </div>
+
+        <div>
+          <label for="codigo">Código</label>
+          <input type="text" id="codigo" name="codigo" placeholder="Ex.: A1B2C3" required>
+          <small class="hint">Dica: o código expira em 10 minutos.</small>
+        </div>
+
+        <div>
+          <label for="senha">Nova senha</label>
+          <input type="password" id="senha" name="senha" placeholder="Mínimo 8 caracteres" required>
+        </div>
+
+        <div class="full">
+          <label for="confirmar">Confirmar nova senha</label>
+          <input type="password" id="confirmar" name="confirmar" placeholder="Repita a senha" required>
+        </div>
+
+        <div class="full" style="display:flex; gap:10px;">
+          <button type="submit" class="auth-btn" style="max-width:220px;">Trocar senha</button>
+          <button type="button" id="btn-reenviar" class="btn-sec" style="max-width:160px;">Reenviar código</button>
+        </div>
+      </form>
+
+      <!-- Caixa de sucesso -->
+      <section id="ok-box" class="card ok-box" style="display:none; margin-top:16px;">
+        <h2 style="margin:0 0 6px 0; color:#0e7a3a;">Senha alterada!</h2>
+        <p style="margin:0; color:#444;">Agora você já pode fazer login com sua nova senha.</p>
+        <div style="margin-top:10px;">
+          <button class="auth-btn" style="max-width:220px;" onclick="location.href='login.html'">Ir para o login</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© SorrisoNet — Trabalho acadêmico</p>
+    </div>
+  </footer>
+
+  <!-- JS DEMO (simulado no front) -->
+  <script>
+    const formEmail = document.getElementById('form-email');
+    const formNova  = document.getElementById('form-nova-senha');
+    const hintEmail = document.getElementById('hint-email');
+    const okBox     = document.getElementById('ok-box');
+
+    const step1 = document.getElementById('step1-ind');
+    const step2 = document.getElementById('step2-ind');
+
+    let emailAtual = '';
+    let codigoGerado = '';
+    let expiraEm = 0; // timestamp
+
+    function gerarCodigo(){
+      // código alfanumérico de 6 chars
+      const base = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let out = '';
+      for(let i=0;i<6;i++){ out += base[Math.floor(Math.random()*base.length)]; }
+      return out;
+    }
+
+    function iniciarCodigo(email){
+      emailAtual = email.trim();
+      codigoGerado = gerarCodigo();
+      expiraEm = Date.now() + (10 * 60 * 1000); // 10 min
+      // Simular "envio"
+      console.log('[SIMULAÇÃO] Código enviado para', emailAtual, '=>', codigoGerado);
+      // Mostra passo 2
+      formEmail.style.display = 'none';
+      formNova.style.display  = 'grid';
+      step1.classList.remove('active');
+      step2.classList.add('active');
+      hintEmail.textContent = 'Enviamos um código para: ' + emailAtual;
+      alert('Enviamos um código para ' + emailAtual + ' (simulado).\nDica para apresentação: ' + codigoGerado);
+    }
+
+    formEmail.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      if(!email){ alert('Informe seu e-mail.'); return; }
+      // Quando for back-end, aqui chamamos: POST /api/redefinir-senha/solicitar
+      iniciarCodigo(email);
+    });
+
+    document.getElementById('btn-reenviar').addEventListener('click', ()=>{
+      if(!emailAtual){ alert('Informe o e-mail no passo 1.'); return; }
+      iniciarCodigo(emailAtual);
+    });
+
+    formNova.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const codigo = document.getElementById('codigo').value.trim().toUpperCase();
+      const senha = document.getElementById('senha').value;
+      const conf  = document.getElementById('confirmar').value;
+
+      if(!codigo || !senha || !conf){
+        alert('Preencha todos os campos.');
+        return;
+      }
+      if(Date.now() > expiraEm){
+        alert('Código expirado. Clique em "Reenviar código".');
+        return;
+      }
+      if(codigo !== codigoGerado){
+        alert('Código inválido.');
+        return;
+      }
+      if(senha.length < 8){
+        alert('A nova senha deve ter no mínimo 8 caracteres.');
+        return;
+      }
+      if(senha !== conf){
+        alert('A confirmação da senha não confere.');
+        return;
+      }
+
+      // Quando for back-end: POST /api/redefinir-senha/confirmar {emailAtual, codigo, senha}
+      // Aqui apenas simulamos sucesso:
+      okBox.style.display = 'block';
+      window.scrollTo({ top: okBox.offsetTop - 20, behavior:'smooth' });
+      // limpar variáveis
+      codigoGerado = ''; emailAtual = ''; expiraEm = 0;
+      formNova.reset();
+    });
+  </script>
+
+  <script src="js/api.js"></script>
+
+  <script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('btnLoginLogout');
+
+  // se o botão existir
+  if (btn) {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      // se estiver logado
+      btn.textContent = 'Sair';
+      btn.href = '#';
+      btn.onclick = () => {
+        logout();
+      };
+    } else {
+      // se não estiver logado
+      btn.textContent = 'Login';
+      btn.href = 'login.html';
+    }
+  }
+});
+</script>
+</body>
+</html>
+
+
+</body>
+</html>

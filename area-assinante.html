@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Área do Assinante — SorrisoNet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- TOPO -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="logotipo_sorriso_net_azul_claro-removebg-preview.png" alt="SorrisoNet">
+      </a>
+      <button class="btn-primary" onclick="location.href='assinatura.html'">ASSINE JÁ</button>
+      <div class="search"><input type="search" placeholder="Digite sua pesquisa" /></div>
+      <nav class="main-nav">
+        <a href="area-assinante.html">ÁREA DO ASSINANTE</a>
+        <a href="planos.html">PLANOS</a>
+        <a href="agenda_doutores.html">GERENCIAMENTO</a>
+        <a href="contato.html">FALE CONOSCO</a>
+<a href="#" onclick="logout()" class="bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-lg text-sm hover:bg-gray-300 transition">
+  Sair
+</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="container" style="padding:40px 0">
+  <h1>Bem-vindo, <strong id="nome-usuario"></strong>!</h1>
+    <p style="text-align:center; color:#555;">Gerencie seus dados, consultas e acompanhe seu histórico de atendimentos.</p>
+
+    <section class="assinante-grid">
+      <!-- Card 1 -->
+      <div class="assinante-card" onclick="location.href='agendamentos.html'">
+        <img src="raio-x.png" alt="Agendamento">
+        <h2>Agendamentos</h2>
+        <p>Veja, edite ou cancele seus horários marcados.</p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="assinante-card" onclick="location.href='relatorio_paciente.html'">
+        <img src="dente.png" alt="Relatórios">
+        <h2>Relatórios</h2>
+        <p>Acompanhe consultas, procedimentos e resultados.</p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="assinante-card" onclick="location.href='configuracao.html'">
+        <img src="logotipo_sorriso_net_azul_claro-removebg-preview.png" alt="Configurações">
+        <h2>Configurações</h2>
+        <p>Gerencie seus dados pessoais e privacidade.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© SorrisoNet — Trabalho acadêmico</p>
+    </div>
+  </footer>
+
+ 
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script>
+(async () => {
+  try {
+    // 1. garante login
+    const me = await requireLogin();
+
+    // 2. bloqueia se não for premium
+    if (!me.premium) {
+      alert('Essa área é exclusiva para assinantes.');
+      window.location.href = 'planos.html';
+      return;
+    }
+
+    // 3. escreve o nome na tela
+    const nomeUsuario = document.getElementById('nome-usuario');
+    if (nomeUsuario && me.nome) {
+      nomeUsuario.textContent = me.nome;
+    }
+  } catch (err) {
+    // requireLogin já manda pra login.html se não tiver token
+  }
+})();
+</script>
+</body>
+</html>
+
+
+

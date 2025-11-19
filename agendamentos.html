@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Agendamentos — SorrisoNet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- TOPO -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="logotipo_sorriso_net_azul_claro-removebg-preview.png" alt="SorrisoNet">
+      </a>
+      <button class="btn-primary" onclick="location.href='assinatura.html'">ASSINE JÁ</button>
+      <div class="search"><input type="search" placeholder="Digite sua pesquisa" /></div>
+      <nav class="main-nav">
+        <a href="area-assinante.html">ÁREA DO ASSINANTE</a>
+        <a href="planos.html">PLANOS</a>
+        <a href="agenda_doutores.html">GERENCIAMENTO</a>
+        <a href="contato.html">FALE CONOSCO</a>
+<a href="#" onclick="logout()" class="bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-lg text-sm hover:bg-gray-300 transition">
+  Sair
+</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="container" style="padding:32px 0">
+    <h1 style="color:var(--primary); margin-bottom:8px;">Agendamentos</h1>
+    <p style="color:#555; margin-top:0;">Crie novos horários e acompanhe seus atendimentos.</p>
+
+    <!-- FORM NOVO AGENDAMENTO -->
+    <section class="card">
+      <h2>Novo agendamento</h2>
+
+      <form id="form-agendamento" class="grid-agenda">
+        <div>
+          <label for="data">Data</label>
+          <input type="date" id="data" name="data" required>
+        </div>
+
+        <div>
+          <label for="hora">Hora</label>
+          <input type="time" id="hora" name="hora" required>
+        </div>
+
+        <div>
+          <label for="profissional">Profissional</label>
+          <select id="profissional" name="profissional" required>
+            <option value="">Selecione</option>
+            <option>Dra. Ana Silva</option>
+            <option>Dr. Bruno Lima</option>
+            <option>Dra. Carla Mendes</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="procedimento">Procedimento</label>
+          <select id="procedimento" name="procedimento" required>
+            <option value="">Selecione</option>
+            <option>Consulta</option>
+            <option>Limpeza</option>
+            <option>Restauração</option>
+            <option>Ortodontia</option>
+          </select>
+        </div>
+
+        <div class="full">
+          <label for="observacoes">Observações (opcional)</label>
+          <input type="text" id="observacoes" name="observacoes" placeholder="Algum detalhe importante?">
+        </div>
+
+        <div class="full right">
+          <button type="submit" class="auth-btn" style="max-width:220px;">Salvar agendamento</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- LISTA DE AGENDAMENTOS -->
+    <section class="card" style="margin-top:24px;">
+      <div class="flex-between">
+        <h2>Meus horários</h2>
+        <div class="filters">
+          <label style="font-size:14px; color:#666; margin-right:8px;">Filtrar por status:</label>
+          <select id="filtro-status">
+            <option value="todos">Todos</option>
+            <option value="Agendado">Agendado</option>
+            <option value="Concluído">Concluído</option>
+            <option value="Cancelado">Cancelado</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Hora</th>
+              <th>Profissional</th>
+              <th>Procedimento</th>
+              <th>Status</th>
+              <th style="width:120px;">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-agenda">
+            <!-- Linhas inseridas via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© SorrisoNet — Trabalho acadêmico</p>
+    </div>
+  </footer>
+
+  <!-- JS SIMPLES PARA DEMO (sem backend) -->
+  <script>
+    const form = document.getElementById('form-agendamento');
+    const tbody = document.getElementById('tbody-agenda');
+    const filtro = document.getElementById('filtro-status');
+
+    // Dados iniciais de exemplo (só pra tela ficar preenchida na apresentação)
+    const agendamentos = [
+      { id: 1, data: '2025-10-25', hora: '09:00', profissional: 'Dra. Ana Silva', procedimento: 'Consulta', status: 'Agendado' },
+      { id: 2, data: '2025-10-26', hora: '14:30', profissional: 'Dr. Bruno Lima', procedimento: 'Limpeza',  status: 'Agendado' },
+      { id: 3, data: '2025-10-20', hora: '10:00', profissional: 'Dra. Carla Mendes', procedimento: 'Ortodontia', status: 'Concluído' },
+    ];
+
+    function renderTabela(){
+      const statusFiltro = filtro.value;
+      tbody.innerHTML = '';
+
+      agendamentos
+        .filter(a => statusFiltro === 'todos' ? true : a.status === statusFiltro)
+        .sort((a,b) => (a.data+a.hora).localeCompare(b.data+b.hora))
+        .forEach(a => {
+          const tr = document.createElement('tr');
+
+          tr.innerHTML = `
+            <td>${formatarData(a.data)}</td>
+            <td>${a.hora}</td>
+            <td>${a.profissional}</td>
+            <td>${a.procedimento}</td>
+            <td><span class="tag tag-${a.status.toLowerCase()}">${a.status}</span></td>
+            <td>
+              <button class="btn-link" data-acao="concluir" data-id="${a.id}">Concluir</button>
+              <button class="btn-link danger" data-acao="cancelar" data-id="${a.id}">Cancelar</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+    }
+
+    function formatarData(iso){
+      const [y,m,d] = iso.split('-');
+      return `${d}/${m}/${y}`;
+    }
+
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const data = form.data.value;
+      const hora = form.hora.value;
+      const profissional = form.profissional.value;
+      const procedimento = form.procedimento.value;
+
+      if(!data || !hora || !profissional || !procedimento){
+        alert('Preencha os campos obrigatórios.');
+        return;
+      }
+
+      const novo = {
+        id: Date.now(),
+        data, hora, profissional, procedimento,
+        status: 'Agendado'
+      };
+      agendamentos.push(novo);
+      renderTabela();
+      form.reset();
+      alert('Agendamento salvo!');
+      // >>> Quando ligar com back-end:
+      // fetch('/api/agendamentos', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(novo)})
+    });
+
+    tbody.addEventListener('click', (e)=>{
+      const btn = e.target.closest('button');
+      if(!btn) return;
+      const id = Number(btn.dataset.id);
+      const ag = agendamentos.find(a => a.id === id);
+      if(!ag) return;
+
+      if(btn.dataset.acao === 'concluir'){
+        ag.status = 'Concluído';
+        renderTabela();
+      }
+      if(btn.dataset.acao === 'cancelar'){
+        if(confirm('Confirmar cancelamento?')){
+          ag.status = 'Cancelado';
+          renderTabela();
+        }
+      }
+    });
+
+    filtro.addEventListener('change', renderTabela);
+
+    // Inicializa
+    renderTabela();
+  </script>
+
+  <script src="js/api.js"></script>
+
+</body>
+</html>

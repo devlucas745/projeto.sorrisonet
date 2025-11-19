@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>SorrisoNet - Redefinir Senha</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        // Cor primária forte para botões e links
+                        "primary": "#138aec", 
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101a22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .form-input {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-200">
+
+    <header
+        class="bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm sticky top-0 z-50 border-b border-slate-200 dark:border-slate-800">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Bloco do Logo (Ajustado) -->
+                <div class="flex items-center gap-3">
+                    <!-- Ajustado para h-8 para ficar menor, como na referência -->
+                    <img src="logotipo_sorriso_net-removebg-preview.png" alt="Logo SorrisoNet" class="h-24 w-auto mr-2" />
+                   
+                </div>
+                
+                <!-- Bloco que contém a Navegação e o Botão (Alinhado à direita com ml-auto) -->
+                <div class="flex items-center space-x-8 ml-auto">
+                    
+                    <!-- Navegação: Apenas Início, Planos e Contato -->
+                    <nav class="hidden md:flex items-center space-x-8">
+                        <a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors"
+                            href="#">Menu</a>
+                        
+                        <a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors"
+                            href="#">Planos</a>
+                        <a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors"
+                            href="#">Contato</a>
+                    </nav>
+            
+            <div class="flex items-center">
+                <a
+                    href="#"
+                    class="bg-primary text-white font-bold py-2 px-6 rounded-lg text-sm hover:opacity-90 transition-opacity">
+                    Entrar
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+        <main class="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+            <div
+                class="w-full max-w-md space-y-8 text-center bg-background-light dark:bg-background-dark p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+                <div>
+                    <div class="flex justify-center items-center">
+                        <span class="material-symbols-outlined text-7xl text-primary">mark_email_read</span>
+                    </div>
+                    <h2 class="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">E-mail de Recuperação
+                        Enviado!</h2>
+                    <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                        Verifique sua caixa de entrada e spam para as instruções de redefinição de senha.
+                    </p>
+                </div>
+                <div class="mt-8 space-y-6">
+                    <a class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-lg text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary/50 transition-colors"
+                        href="#">
+                        Retornar ao Login
+                    </a>
+                </div>
+            </div>
+        </main>
+        <footer class="bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-700">
+            <div class="container mx-auto py-8 px-6 text-center text-gray-500 dark:text-gray-400">
+                <div class="flex justify-center space-x-6 mb-4">
+                    <a class="hover:text-primary dark:hover:text-primary transition-colors" href="#">Termos de
+                        Serviço</a>
+                    <a class="hover:text-primary dark:hover:text-primary transition-colors" href="#">Política de
+                        Privacidade</a>
+                </div>
+                <p>© 2025 SorrisoNet. Todos os direitos reservados.</p>
+            </div>
+        </footer>
+    </div>
+
+</body>
+
+</html>

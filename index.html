@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>SorrisoNet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Fonte (só pra ficar bonito) -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;700&display=swap" rel="stylesheet">
+
+  <!-- Nosso CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- TOPO / MENU -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="logotipo_sorriso_net_azul_claro-removebg-preview.png" alt="SorrisoNet">
+      </a>
+
+      <button class="btn-primary" onclick="location.href='assinatura.html'">ASSINE JÁ</button>
+
+      <div class="search">
+        <input type="search" placeholder="Digite sua pesquisa" />
+      </div>
+
+      <nav class="main-nav">
+        <a id="linkAreaAssinante" href="area-assinante.html">ÁREA DO ASSINANTE</a>
+        <a href="planos.html">PLANOS</a>
+        <a href="agenda_doutores.html">GERENCIAMENTO</a>
+        <a href="contato.html">FALE CONOSCO</a>
+  <a id="btnLoginLogout" href="login.html">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main>
+    <!-- BANNER GRANDE (HERO) -->
+    <section class="hero">
+      <!-- Usando a imagem que veio no seu zip -->
+      <img src="raio-x.png" alt="" class="hero-bg" />
+      <div class="hero-overlay">
+        <h1>CUIDE MELHOR DO SEU PROJETO</h1>
+      </div>
+    </section>
+
+    <!-- Aqui embaixo você pode colocar os cards/ícones da sua maquete -->
+    <section class="features">
+      <div class="container">
+        <!-- Deixa vazio por enquanto -->
+      </div>
+    </section>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© SorrisoNet — Trabalho acadêmico</p>
+    </div>
+  </footer>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const btnLoginLogout = document.getElementById('btnLoginLogout');
+  const linkAreaAssinante = document.getElementById('linkAreaAssinante');
+
+  const token = localStorage.getItem('token');
+
+  // Caso não esteja logado
+  if (!token) {
+    if (btnLoginLogout) {
+      btnLoginLogout.textContent = 'Login';
+      btnLoginLogout.href = 'login.html';
+      btnLoginLogout.onclick = null;
+    }
+    if (linkAreaAssinante) {
+      linkAreaAssinante.style.display = 'none';
+    }
+    return;
+  }
+
+  // Se está logado, buscar dados
+  try {
+    const me = await apiGet('/api/me', true); // manda o token
+
+    // Ajusta botão pra "Sair"
+    if (btnLoginLogout) {
+      btnLoginLogout.textContent = 'Sair';
+      btnLoginLogout.href = '#';
+      btnLoginLogout.onclick = () => {
+        logout(); // limpa token e manda pro login.html
+      };
+    }
+
+    // Mostra ou esconde a área do assinante
+    if (linkAreaAssinante) {
+      if (me.premium === true) {
+        linkAreaAssinante.style.display = 'inline-block'; // pode ver
+      } else {
+        linkAreaAssinante.style.display = 'none'; // NÃO pode ver
+      }
+    }
+  } catch (err) {
+    // Token inválido / expirado
+    clearToken();
+    if (btnLoginLogout) {
+      btnLoginLogout.textContent = 'Login';
+      btnLoginLogout.href = 'login.html';
+      btnLoginLogout.onclick = null;
+    }
+    if (linkAreaAssinante) {
+      linkAreaAssinante.style.display = 'none';
+    }
+  }
+});
+</script>
+
+</body>
+</html>
+
+</body>
+</html>
+

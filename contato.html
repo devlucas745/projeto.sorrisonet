@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <title>Fale Conosco — SorrisoNet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style>
+        /* -------------------------------------- */
+        /* Variáveis e Estilos de Base (Refinado) */
+        /* -------------------------------------- */
+
+        :root {
+            --primary: #007bff; /* Azul primário (SorrisoNet) */
+            --primary-dark: #0056b3;
+            --secondary: #6c757d;
+            --success: #28a745;
+            --error: #dc3545;
+            --text-color: #333;
+            --background-color: #f4f7f9; /* Fundo mais suave */
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra mais destacada */
+            --border-color: #dee2e6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* -------------------------------------- */
+        /* TOPO (Topbar) - DESIGN MODERNO */
+        /* -------------------------------------- */
+
+        .topbar {
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Sombra suave */
+            border-bottom: 3px solid var(--primary); /* Destaque azul */
+        }
+
+        .topbar-inner {
+            max-width: 1300px; /* Largura um pouco maior */
+            margin: 0 auto;
+            padding: 10px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand img {
+            height: 40px;
+            vertical-align: middle;
+        }
+
+        .search {
+            flex-grow: 1;
+            max-width: 250px;
+        }
+
+        .search input[type="search"] {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px; /* Borda arredondada */
+            transition: all 0.3s;
+        }
+
+        .search input[type="search"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            font-size: 15px;
+        }
+
+        .main-nav a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            transition: color 0.2s;
+            padding: 5px 0;
+        }
+
+        .main-nav a:hover {
+            color: var(--primary);
+        }
+
+        /* Botões */
+        .btn-primary, .auth-btn, #chatbot-send-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-primary:hover, .auth-btn:hover, #chatbot-send-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        #chatbot-send-btn {
+            text-transform: none; /* Não precisa ser maiúsculo no chat */
+        }
+
+        .btn-sec {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        /* -------------------------------------- */
+        /* CONTEÚDO (Main) - FORMULÁRIO APRIMORADO */
+        /* -------------------------------------- */
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 8px !important;
+        }
+
+        .card {
+            padding: 30px;
+            border: none;
+            border-radius: 12px;
+            background-color: white;
+            box-shadow: var(--card-shadow);
+            margin-top: 25px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px 20px; /* Mais espaço vertical */
+        }
+
+        .contact-grid .full {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 600px) {
+            .contact-grid {
+                grid-template-columns: 1fr; /* Volta para uma coluna em telas pequenas */
+                gap: 20px;
+            }
+            .contact-grid .full {
+                grid-column: span 1;
+            }
+        }
+
+        label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        input[type="text"], input[type="email"], input[type="tel"], select, textarea, input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: #fafafa;
+        }
+
+        input[type="file"] {
+             padding: 10px; /* Ajuste para input file */
+        }
+        
+        input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+            background-color: white;
+            outline: none;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .up-row {
+            margin-top: 10px;
+        }
+        
+        .hint {
+            display: block;
+            font-size: 0.85em;
+            color: var(--secondary);
+            margin-top: 6px;
+        }
+
+        .actions-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .ok-box {
+            border: 1px solid var(--success);
+            background-color: #e6fff0;
+            color: #155724;
+        }
+
+        /* RODAPÉ (Footer) */
+        .site-footer {
+            background-color: #343a40; /* Cor escura para contraste */
+            color: white;
+            text-align: center;
+            padding: 25px 0;
+            margin-top: 50px;
+        }
+        .site-footer .container {
+            max-width: 1200px;
+        }
+        
+        /* -------------------------------------- */
+        /* CHATBOT (Estilos de Janela e Mensagens) */
+        /* -------------------------------------- */
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            font-family: inherit;
+        }
+
+        .chatbot-toggle-btn {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 36px;
+            line-height: 65px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s, transform 0.3s;
+            text-align: center;
+        }
+        .chatbot-toggle-btn:hover {
+            background-color: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .chatbot-window {
+            width: 320px;
+            height: 450px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .chatbot-window.hidden {
+            display: none;
+        }
+
+        .chatbot-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .chatbot-body {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+            background-color: #eef3f6; /* Fundo suave do chat */
+        }
+
+        .chatbot-message {
+            padding: 10px 12px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            max-width: 85%;
+            clear: both;
+            font-size: 14px;
+            word-wrap: break-word;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+        }
+
+        .chatbot-message.bot {
+            background-color: #ffffff; 
+            color: #333;
+            float: left;
+            border-top-left-radius: 5px; 
+        }
+        
+        .chatbot-message.user {
+            background-color: #dcf8c6; 
+            float: right;
+            border-top-right-radius: 5px;
+            margin-left: 15%; 
+        }
+
+        .chatbot-options {
+            padding-top: 5px;
+            clear: both;
+            margin-top: 5px;
+        }
+
+        .chatbot-options button {
+            display: block;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 8px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        .chatbot-options button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .chatbot-input-area {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #e0e0e0;
+            background-color: #fff;
+        }
+        
+        #chatbot-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        
+        #chatbot-send-btn {
+            padding: 0 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="index.html">
+                <img src="logotipo_sorriso_net_azul_claro-removebg-preview.png" alt="SorrisoNet">
+            </a>
+            <button class="btn-primary" onclick="location.href='assinatura.html'">ASSINE JÁ</button>
+            <div class="search"><input type="search" placeholder="Digite sua pesquisa" /></div>
+            <nav class="main-nav">
+                <a href="area-assinante.html">ÁREA DO ASSINANTE</a>
+                <a href="planos.html">PLANOS</a>
+                <a href="agenda_doutores.html">GERENCIAMENTO</a>
+                <a href="contato.html">FALE CONOSCO</a>
+                <a id="btnLoginLogout" href="login.html">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 style="color:var(--primary);">Fale Conosco</h1>
+        <p style="margin-top:0; color:#555;">Envie sua mensagem para nossa equipe. Responderemos o quanto antes.</p>
+
+        <section class="card">
+            <form id="form-contato" class="contact-grid" novalidate>
+                <div class="full">
+                    <label for="nome">Nome completo</label>
+                    <input type="text" id="nome" name="nome" placeholder="Seu nome" required>
+                </div>
+
+                <div>
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="voce@email.com" required>
+                </div>
+
+                <div>
+                    <label for="assunto">Assunto</label>
+                    <select id="assunto" name="assunto" required>
+                        <option value="">Selecione</option>
+                        <option value="planos">Dúvidas sobre planos</option>
+                        <option value="acesso">Login / Problema de acesso</option>
+                        <option value="area_assinante">Área do Assinante / Gerenciamento</option>
+                        <option value="atendente">Falar com Atendente</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="tipo">Tipo de solicitação</label>
+                    <select id="tipo" name="tipo" required>
+                        <option value="">Selecione</option>
+                        <option>Dúvida</option>
+                        <option>Suporte</option>
+                        <option>Elogio</option>
+                        <option>Reclamação</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="telefone">Telefone (opcional)</label>
+                    <input type="tel" id="telefone" name="telefone" placeholder="(11) 90000-0000">
+                </div>
+
+                <div class="full">
+                    <label for="mensagem">Mensagem</label>
+                    <textarea id="mensagem" name="mensagem" rows="6" placeholder="Descreva sua dúvida/solicitação" required></textarea>
+                </div>
+
+                <div class="full up-row">
+                    <label for="anexo">Anexo (opcional)</label>
+                    <input type="file" id="anexo" name="anexo" accept=".png,.jpg,.jpeg,.pdf,.doc,.docx">
+                    <small class="hint">Formatos aceitos: PNG, JPG, PDF, DOC, DOCX (máx. ~5MB)</small>
+                </div>
+
+                <div class="full actions-row">
+                    <button type="submit" class="auth-btn" style="max-width:220px;">Enviar mensagem</button>
+                    <button type="button" id="btn-limpar" class="btn-sec" style="max-width:160px;">Limpar</button>
+                </div>
+            </form>
+        </section>
+
+        <section id="ok-box" class="card ok-box" style="display:none; margin-top:16px;">
+            <h2 style="margin:0 0 6px 0; color:var(--success);">Mensagem enviada!</h2>
+            <p style="margin:0; color:#444;">Recebemos sua solicitação. Um protocolo foi gerado para acompanhamento.</p>
+            <p style="margin:6px 0 0 0;"><strong>Protocolo:</strong> <span id="proto"></span></p>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>© SorrisoNet — Trabalho acadêmico</p>
+        </div>
+    </footer>
+
+    <div class="chatbot-container">
+        <div id="chatbot-window" class="chatbot-window hidden">
+            <div class="chatbot-header">Assistente SorrisoNet</div>
+            <div id="chatbot-body" class="chatbot-body">
+                </div>
+            <div class="chatbot-input-area">
+                <input type="text" id="chatbot-input" placeholder="Digite sua pergunta ou 'menu' / 'encerrar'..." disabled>
+                <button id="chatbot-send-btn" disabled>Enviar</button>
+            </div>
+        </div>
+        <button id="chatbot-toggle-btn" class="chatbot-toggle-btn">
+            💬
+        </button>
+    </div>
+
+
+    <script>
+        /* -------------------------------------- */
+        /* JS Original do Formulário e Login */
+        /* -------------------------------------- */
+        const form = document.getElementById('form-contato');
+        const okBox = document.getElementById('ok-box');
+        const protoSpan = document.getElementById('proto');
+        const btnLimpar = document.getElementById('btn-limpar');
+        const formContato = document.getElementById('form-contato'); 
+
+        function gerarProtocolo(){
+            const n = Date.now().toString(36).toUpperCase();
+            return 'SN-' + n.slice(-8);
+        }
+
+        function validaMinima(){
+            const req = ['nome','email','assunto','tipo','mensagem'];
+            for(const id of req){
+                const el = document.getElementById(id);
+                if(!el.value.trim()) return false;
+            }
+            return true;
+        }
+
+        form.addEventListener('submit', (e)=>{
+            e.preventDefault();
+            if(!validaMinima()){
+                alert('Preencha os campos obrigatórios.');
+                return;
+            }
+
+            const protocolo = gerarProtocolo();
+            protoSpan.textContent = protocolo;
+
+            okBox.style.display = 'block';
+            form.reset();
+            window.scrollTo({top: okBox.offsetTop - 20, behavior:'smooth'});
+        });
+
+        btnLimpar.addEventListener('click', ()=> form.reset());
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('btnLoginLogout');
+
+            if (btn) {
+                const token = localStorage.getItem('token');
+
+                if (token) {
+                    btn.textContent = 'Sair';
+                    btn.href = '#';
+                    btn.onclick = () => {
+                        localStorage.removeItem('token');
+                        window.location.reload(); 
+                    };
+                } else {
+                    btn.textContent = 'Login';
+                    btn.href = 'login.html';
+                }
+            }
+        });
+
+        /* -------------------------------------- */
+        /* SCRIPT DO ASSISTENTE VIRTUAL (CHATBOT) */
+        /* -------------------------------------- */
+        const chatbotToggleBtn = document.getElementById('chatbot-toggle-btn');
+        const chatbotWindow = document.getElementById('chatbot-window');
+        const chatbotBody = document.getElementById('chatbot-body');
+        const chatbotInput = document.getElementById('chatbot-input');
+        const chatbotSendBtn = document.getElementById('chatbot-send-btn');
+        
+
+        let currentFlow = 'main';
+
+        // --- Funções de Manipulação da Interface do Chat ---
+
+        function toggleChatbot() {
+            chatbotWindow.classList.toggle('hidden');
+            if (!chatbotWindow.classList.contains('hidden')) {
+                chatbotInput.disabled = false;
+                chatbotSendBtn.disabled = false;
+                if (chatbotBody.innerHTML === '' || currentFlow === 'main') {
+                    showWelcomeMessage();
+                }
+                chatbotInput.focus();
+            } else {
+                chatbotInput.disabled = true;
+                chatbotSendBtn.disabled = true;
+            }
+        }
+        
+        // Função para redirecionar
+        function redirectTo(url) {
+            window.location.href = url;
+        }
+
+
+        function addBotMessage(text) {
+            const msg = document.createElement('div');
+            msg.className = 'chatbot-message bot';
+            // Regex para transformar links no chat em âncoras (embora o novo fluxo agora use redirecionamento)
+            msg.innerHTML = text.replace(/\[(planos\.html|agenda_doutores\.html|login\.html)\]/g, '<a href="$1" target="_blank" style="color:var(--primary-dark); text-decoration:underline; font-weight:bold;">Acessar</a>');
+            chatbotBody.appendChild(msg);
+            chatbotBody.scrollTop = chatbotBody.scrollHeight;
+        }
+        
+        function addUserMessage(text) {
+            const msg = document.createElement('div');
+            msg.className = 'chatbot-message user';
+            msg.textContent = text;
+            chatbotBody.appendChild(msg);
+            chatbotBody.scrollTop = chatbotBody.scrollHeight;
+        }
+
+        function addOptions(options) {
+            const existingOptions = chatbotBody.querySelector('.chatbot-options');
+            if (existingOptions) existingOptions.remove();
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'chatbot-options';
+            
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.textContent = option.text;
+                // Passa a ação para o handler
+                btn.onclick = () => handleMenuAction(option.action, option.type, option.assuntoValue);
+                optionsDiv.appendChild(btn);
+            });
+            
+            chatbotBody.appendChild(optionsDiv);
+            chatbotBody.scrollTop = chatbotBody.scrollHeight;
+        }
+        
+        // --- Lógica de Respostas Rápidas (Simulação de IA) ---
+        function processTextQuery(query) {
+            const cleanedQuery = query.toLowerCase().trim();
+
+            // 1. ENCERRAMENTO
+            if (cleanedQuery === 'encerrar' || cleanedQuery === 'sair') {
+                addBotMessage("Certo! O chat será fechado. Se precisar de mais alguma coisa, clique no ícone do chat novamente.");
+                setTimeout(toggleChatbot, 2000); // Fecha o chat após 2 segundos
+                return;
+            }
+
+            // 2. CUMPRIMENTOS
+            if (cleanedQuery === 'ola' || cleanedQuery === 'olá' || cleanedQuery === 'oi' || cleanedQuery === 'bom dia' || cleanedQuery === 'boa tarde') {
+                addBotMessage("Olá! Que bom te ver por aqui. Como posso te ajudar hoje? Digite sua pergunta ou **'menu'** para ver as opções.");
+                setTimeout(showMenuOptions, 1500);
+                return;
+            }
+
+            // 3. Comandos de Menu
+            if (cleanedQuery === 'menu' || cleanedQuery.includes('opções') || cleanedQuery.includes('ajuda')) {
+                showMenuOptions();
+                return;
+            }
+
+            // 4. Perguntas sobre Planos e Preços
+            if (cleanedQuery.includes('plano') || cleanedQuery.includes('preço') || cleanedQuery.includes('custo') || cleanedQuery.includes('valor')) {
+                // Ao invés de redirecionar direto, mostra a explicação
+                handleMenuAction('planos'); 
+                return;
+            
+            // 5. Perguntas sobre Agendamento/Gerenciamento
+            } else if (cleanedQuery.includes('agendar') || cleanedQuery.includes('consulta') || cleanedQuery.includes('marcar') || cleanedQuery.includes('remarcar') || cleanedQuery.includes('gerenciamento')) {
+                // Ao invés de redirecionar direto, mostra a explicação
+                handleMenuAction('agendamento');
+                return;
+
+            // 6. Perguntas sobre Acesso/Login
+            } else if (cleanedQuery.includes('login') || cleanedQuery.includes('acesso') || cleanedQuery.includes('senha')) {
+                addBotMessage("Se você esqueceu a senha, use a tela de login para recuperar. Se precisar de suporte técnico, clique abaixo.");
+                showAcessoFlow();
+                return;
+
+            // 7. Perguntas sobre Cobertura (Doenças Graves)
+            } else if (cleanedQuery.includes('doença') || cleanedQuery.includes('grave') || cleanedQuery.includes('cobertura') || cleanedQuery.includes('nascença')) {
+                addBotMessage("A SorrisoNet oferece cobertura abrangente, mas **não cobrimos doenças de nascença/congênitas**, pois são casos de alta complexidade. Para detalhes específicos, use o formulário Fale Conosco.");
+                setTimeout(showMenuOptions, 1500);
+                return;
+
+            // 8. Se a resposta for genérica ou não for entendida
+            } else {
+                addBotMessage("Não encontrei uma resposta exata para sua pergunta. Por favor, digite **'menu'** para ver as opções de atendimento ou reformule sua pergunta de forma simples.");
+            }
+            
+            setTimeout(showMenuOptions, 1500); 
+        }
+
+        // Função para tratamento de ações de Menu (Aprimorada para explicações)
+        function handleMenuAction(action, type = '', assuntoValue = '') {
+            const optionsDiv = chatbotBody.querySelector('.chatbot-options');
+            if (optionsDiv) optionsDiv.remove();
+
+            switch (action) {
+                case 'planos':
+                    showPlanosFlow(); 
+                    break;
+                case 'agendamento':
+                    showAgendamentoFlow(); 
+                    break;
+                case 'acesso':
+                    showAcessoFlow(); 
+                    break;
+                case 'financeiro':
+                    showFinanceiroFlow(); 
+                    break;
+                case 'atendente':
+                    showAtendenteFlow(type, assuntoValue); 
+                    break;
+                case 'main':
+                    showWelcomeMessage(); 
+                    break;
+            }
+        }
+
+        function showWelcomeMessage() {
+            chatbotBody.innerHTML = '';
+            currentFlow = 'main';
+            addBotMessage("Olá! Eu sou o assistente virtual da SorrisoNet. **Digite sua pergunta** (Ex: 'quanto custa o plano?'), **'menu'** para ver as opções, ou **'encerrar'** para fechar.");
+        }
+
+        function showMenuOptions() {
+            addBotMessage("Ou escolha uma opção abaixo:");
+            addOptions([
+                { text: "1. Dúvidas sobre planos", action: 'planos' },
+                { text: "2. Gerenciamento / Agendamento", action: 'agendamento' },
+                { text: "3. Login / Problema de Acesso", action: 'acesso' },
+                { text: "4. Financeiro/Boleto", action: 'financeiro' },
+                { text: "5. Falar com Atendente", action: 'atendente', type: 'Dúvida', assuntoValue: 'outros' },
+            ]);
+        }
+
+        // FLUXOS APRIMORADOS COM EXPLICAÇÃO
+
+        function showPlanosFlow() {
+            addBotMessage("Ótima escolha! Nossos planos oferecem **cobertura completa**, incluindo prevenção, tratamentos básicos e urgência 24h.");
+            addBotMessage("Para ver os preços detalhados e as opções de assinatura disponíveis, clique em **Ver Planos Agora**.");
+            addOptions([
+                { text: "Ver Planos Agora", action: 'redirect_planos' },
+                { text: "Voltar ao Menu Principal", action: 'main' },
+            ]);
+        }
+        // Ação de redirecionamento imediata para Planos
+        function handleRedirectPlanos() {
+             addBotMessage("Encaminhando você para a página de **Planos e Preços** em instantes...");
+             setTimeout(() => redirectTo('planos.html'), 2000); 
+        }
+
+        function showAgendamentoFlow() {
+            addBotMessage("Na Área de Gerenciamento você pode **agendar, reagendar ou cancelar** suas consultas. É rápido e você tem controle total da sua agenda!");
+            addBotMessage("Para acessar, clique em **Acessar Gerenciamento**.");
+            addOptions([
+                { text: "Acessar Gerenciamento", action: 'redirect_agenda' },
+                { text: "Voltar ao Menu Principal", action: 'main' },
+            ]);
+        }
+        // Ação de redirecionamento imediata para Agendamento
+        function handleRedirectAgenda() {
+             addBotMessage("Encaminhando você para a página de **Gerenciamento de Consultas** em instantes...");
+             setTimeout(() => redirectTo('agenda_doutores.html'), 2000); 
+        }
+
+        function showAcessoFlow() {
+            addBotMessage("Para problemas de acesso (login, senha, e-mail de cadastro), oferecemos **suporte técnico dedicado** através do formulário de contato.");
+            addOptions([
+                { text: "Preencher Formulário (Problema de Login)", action: 'atendente', type: 'Suporte', assuntoValue: 'acesso' },
+                { text: "Ir para a tela de Login", action: 'redirect_login' },
+                { text: "Voltar ao Menu Principal", action: 'main' },
+            ]);
+        }
+        // Ação de redirecionamento imediata para Login
+        function handleRedirectLogin() {
+             addBotMessage("Encaminhando você para a página de **Login** em instantes...");
+             setTimeout(() => redirectTo('login.html'), 2000); 
+        }
+
+        function showFinanceiroFlow() {
+            addBotMessage("Se você precisa de **segunda via de boleto, comprovante de pagamento ou negociar** valores, use nosso canal direto com o Financeiro para um atendimento seguro.");
+            addOptions([
+                { text: "Preencher Formulário (Financeiro)", action: 'atendente', type: 'Dúvida', assuntoValue: 'financeiro' },
+                { text: "Voltar ao Menu Principal", action: 'main' },
+            ]);
+        }
+
+        // FLUXO DE CHAT: Preenche o formulário e rola a tela
+        function showAtendenteFlow(tipo = 'Dúvida', assuntoValue = 'outros') {
+            addBotMessage("Certo! Para agilizar seu atendimento, o formulário 'Fale Conosco' foi pré-selecionado para o **Assunto** e **Tipo** corretos.");
+            
+            // Preenche o formulário
+            document.getElementById('assunto').value = assuntoValue;
+            document.getElementById('tipo').value = tipo;
+            
+            addBotMessage(`Por favor, complete o restante do formulário acima (Nome, E-mail, Mensagem) e clique em 'Enviar mensagem'.`);
+            // Rola a tela para o formulário
+            window.scrollTo({top: formContato.offsetTop - 50, behavior:'smooth'});
+            
+            addOptions([
+                { text: "Voltar ao Menu Principal", action: 'main' },
+            ]);
+        }
+
+        // --- Event Listeners para Envio de Texto e Botões ---
+
+        function handleSend() {
+            const query = chatbotInput.value;
+            if (query.trim() === '') return;
+            
+            addUserMessage(query);
+            chatbotInput.value = ''; // Limpa o campo
+            
+            // Simula o tempo de "pensamento"
+            setTimeout(() => {
+                processTextQuery(query);
+            }, 500); 
+        }
+
+        chatbotToggleBtn.addEventListener('click', toggleChatbot);
+        chatbotSendBtn.addEventListener('click', handleSend);
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSend();
+            }
+        });
+        
+        // Adicionando handlers de redirecionamento ao escopo global (ou editando handleMenuAction)
+        // O método mais limpo é atualizar o handleMenuAction para incluir as novas ações de redirecionamento imediato:
+
+        function handleMenuAction(action, type = '', assuntoValue = '') {
+            const optionsDiv = chatbotBody.querySelector('.chatbot-options');
+            if (optionsDiv) optionsDiv.remove();
+
+            switch (action) {
+                case 'planos':
+                    showPlanosFlow(); 
+                    break;
+                case 'agendamento':
+                    showAgendamentoFlow(); 
+                    break;
+                case 'acesso':
+                    showAcessoFlow(); 
+                    break;
+                case 'financeiro':
+                    showFinanceiroFlow(); 
+                    break;
+                case 'atendente':
+                    showAtendenteFlow(type, assuntoValue); 
+                    break;
+                case 'redirect_planos': // Novo handler
+                    handleRedirectPlanos();
+                    break;
+                case 'redirect_agenda': // Novo handler
+                    handleRedirectAgenda();
+                    break;
+                case 'redirect_login': // Novo handler
+                    handleRedirectLogin();
+                    break;
+                case 'main':
+                    showWelcomeMessage(); 
+                    break;
+            }
+        }
+        
+    </script>
+
+</body>
+</html>
