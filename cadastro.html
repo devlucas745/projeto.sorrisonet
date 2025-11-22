@@ -45,6 +45,7 @@
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0, 119, 182, 0.15);
             overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         /* --- CABEÇALHO --- */
@@ -69,7 +70,7 @@
             font-weight: 300;
         }
 
-        /* Detalhe decorativo (dente estilizado/círculo) */
+        /* Detalhe decorativo */
         .header::after {
             content: '';
             position: absolute;
@@ -83,7 +84,7 @@
         }
 
         /* --- FORMULÁRIO --- */
-        form {
+        .form-content {
             padding: 40px 40px 30px 40px;
         }
 
@@ -130,6 +131,7 @@
             font-family: 'Poppins', sans-serif;
             transition: all 0.3s ease;
             background-color: #f8fafc;
+            width: 100%;
         }
 
         input:focus, select:focus {
@@ -139,7 +141,7 @@
             box-shadow: 0 0 0 4px rgba(0, 119, 182, 0.1);
         }
 
-        /* --- BOTÕES E RODAPÉ (Solicitação Específica) --- */
+        /* --- BOTÕES E RODAPÉ --- */
         .footer-actions {
             margin-top: 40px;
             padding-top: 30px;
@@ -173,32 +175,75 @@
             background: linear-gradient(90deg, var(--dark-blue), var(--primary-blue));
         }
 
-        .login-link {
-            font-size: 14px;
-            color: #64748b;
+        .btn-outline {
+            background: transparent;
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+            margin-top: 10px;
+        }
+        
+        .btn-outline:hover {
+            background: #f1f5f9;
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: none;
         }
 
-        .login-link a {
+        .login-link, .forgot-link {
+            font-size: 14px;
+            color: #64748b;
+            text-align: center;
+        }
+
+        .login-link a, .forgot-link a {
             color: var(--primary-blue);
             text-decoration: none;
             font-weight: 700;
             transition: color 0.2s;
+            cursor: pointer;
         }
 
-        .login-link a:hover {
+        .login-link a:hover, .forgot-link a:hover {
             color: var(--dark-blue);
             text-decoration: underline;
+        }
+
+        /* Estilo específico para o Esqueci a senha */
+        .forgot-link {
+            margin-top: 5px;
+            font-size: 13px;
+        }
+        
+        .forgot-link a {
+            color: #e63946; /* Um leve vermelho/destaque ou manter azul */
+            color: var(--primary-blue); /* Mantendo azul do tema */
+            opacity: 0.8;
+        }
+
+        /* Utilitários de Visibilidade */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Animação suave */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* --- RESPONSIVIDADE (Celular) --- */
         @media (max-width: 600px) {
             .row {
-                grid-template-columns: 1fr; /* Vira 1 coluna no celular */
+                grid-template-columns: 1fr;
             }
             .full-width {
                 grid-column: span 1;
             }
-            form {
+            .form-content {
                 padding: 20px;
             }
             .header {
@@ -210,95 +255,150 @@
 <body>
 
     <div class="container">
-        <div class="header">
-            <h1>SorrisoNet</h1>
-            <p>Cadastro de Paciente Profissional</p>
+        <!-- TELA DE CADASTRO (PADRÃO) -->
+        <div id="cadastro-screen" class="fade-in">
+            <div class="header">
+                <h1>SorrisoNet</h1>
+                <p>Cadastro de Paciente Profissional</p>
+            </div>
+
+            <form action="#" method="POST" class="form-content">
+                
+                <div class="section-label">Dados Pessoais</div>
+                
+                <div class="row">
+                    <div class="input-group full-width">
+                        <label for="nome">Nome Completo</label>
+                        <input type="text" id="nome" placeholder="Digite o nome do paciente" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-group">
+                        <label for="cpf">CPF</label>
+                        <input type="text" id="cpf" placeholder="000.000.000-00">
+                    </div>
+                    <div class="input-group">
+                        <label for="nascimento">Data de Nascimento</label>
+                        <input type="date" id="nascimento">
+                    </div>
+                </div>
+
+                <div class="section-label">Contato e Endereço</div>
+
+                <div class="row">
+                    <div class="input-group">
+                        <label for="celular">Celular / WhatsApp</label>
+                        <input type="tel" id="celular" placeholder="(99) 99999-9999">
+                    </div>
+                    <div class="input-group">
+                        <label for="email">E-mail (Opcional)</label>
+                        <input type="email" id="email" placeholder="paciente@email.com">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-group">
+                        <label for="cep">CEP</label>
+                        <input type="text" id="cep" placeholder="00000-000">
+                    </div>
+                    <div class="input-group">
+                        <label for="cidade">Cidade/UF</label>
+                        <input type="text" id="cidade">
+                    </div>
+                </div>
+
+                <div class="section-label">Dados do Atendimento</div>
+
+                <div class="row">
+                    <div class="input-group">
+                        <label for="convenio">Plano / Convênio</label>
+                        <select id="convenio">
+                            <option value="particular">Particular</option>
+                            <option value="unimed">Unimed Odonto</option>
+                            <option value="amil">Amil Dental</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="indicacao">Como nos conheceu?</label>
+                        <select id="indicacao">
+                            <option value="instagram">Instagram / Facebook</option>
+                            <option value="google">Google</option>
+                            <option value="amigo">Indicação de Amigo</option>
+                            <option value="placa">Passou na frente</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="footer-actions">
+                    
+                    <button type="submit" class="btn-submit">
+                        AVANÇAR E CONCLUIR
+                    </button>
+
+                    <div class="login-link">
+                        Já possui conta? <a href="login.html">Acesse aqui</a>.
+                    </div>
+
+                    <!-- BOTÃO ESQUICI A SENHA ADICIONADO AQUI -->
+                    <div class="forgot-link">
+                        <a onclick="alternarTelas('recuperar')">Esqueci a senha?</a>
+                    </div>
+
+                </div>
+
+            </form>
         </div>
 
-        <form action="#" method="POST">
-            
-            <div class="section-label">Dados Pessoais</div>
-            
-            <div class="row">
-                <div class="input-group full-width">
-                    <label for="nome">Nome Completo</label>
-                    <input type="text" id="nome" placeholder="Digite o nome do paciente" required>
-                </div>
+        <!-- TELA DE RECUPERAÇÃO DE SENHA (OCULTA INICIALMENTE) -->
+        <div id="recuperacao-screen" class="hidden fade-in">
+            <div class="header">
+                <h1>Recuperar Acesso</h1>
+                <p>Enviaremos um código para você</p>
             </div>
 
-            <div class="row">
-                <div class="input-group">
-                    <label for="cpf">CPF</label>
-                    <input type="text" id="cpf" placeholder="000.000.000-00">
+            <div class="form-content">
+                <div class="section-label" style="text-align: center; border: none; padding: 0;">
+                    Digite seu e-mail cadastrado
                 </div>
-                <div class="input-group">
-                    <label for="nascimento">Data de Nascimento</label>
-                    <input type="date" id="nascimento">
-                </div>
-            </div>
 
-            <div class="section-label">Contato e Endereço</div>
+                <div style="max-width: 400px; margin: 30px auto;">
+                    <div class="input-group">
+                        <label for="email-recuperacao">Seu E-mail</label>
+                        <input type="email" id="email-recuperacao" placeholder="ex: joao@email.com" required>
+                    </div>
+                </div>
 
-            <div class="row">
-                <div class="input-group">
-                    <label for="celular">Celular / WhatsApp</label>
-                    <input type="tel" id="celular" placeholder="(99) 99999-9999">
-                </div>
-                <div class="input-group">
-                    <label for="email">E-mail (Opcional)</label>
-                    <input type="email" id="email" placeholder="paciente@email.com">
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="input-group">
-                    <label for="cep">CEP</label>
-                    <input type="text" id="cep" placeholder="00000-000">
-                </div>
-                <div class="input-group">
-                    <label for="cidade">Cidade/UF</label>
-                    <input type="text" id="cidade">
+                <div class="footer-actions">
+                    <button type="button" class="btn-submit" onclick="alert('Código enviado para seu e-mail!')">
+                        ENVIAR CÓDIGO
+                    </button>
+                    
+                    <button type="button" class="btn-submit btn-outline" onclick="alternarTelas('cadastro')">
+                        VOLTAR PARA O CADASTRO
+                    </button>
                 </div>
             </div>
+        </div>
 
-            <div class="section-label">Dados do Atendimento</div>
-
-            <div class="row">
-                <div class="input-group">
-                    <label for="convenio">Plano / Convênio</label>
-                    <select id="convenio">
-                        <option value="particular">Particular</option>
-                        <option value="unimed">Unimed Odonto</option>
-                        <option value="amil">Amil Dental</option>
-                        <option value="outros">Outros</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="indicacao">Como nos conheceu?</label>
-                    <select id="indicacao">
-                        <option value="instagram">Instagram / Facebook</option>
-                        <option value="google">Google</option>
-                        <option value="amigo">Indicação de Amigo</option>
-                        <option value="placa">Passou na frente</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="footer-actions">
-                
-                <button type="submit" class="btn-submit">
-                    AVANÇAR E CONCLUIR
-                </button>
-
-                <div class="login-link">
-                    <!-- AQUI ESTÁ A LIGAÇÃO CORRETA -->
-                    Já possui conta? <a href="login.html">Acesse aqui</a>.
-                </div>
-
-            </div>
-
-        </form>
     </div>
+
+    <!-- SCRIPT PARA TROCAR AS TELAS -->
+    <script>
+        function alternarTelas(tela) {
+            const telaCadastro = document.getElementById('cadastro-screen');
+            const telaRecuperacao = document.getElementById('recuperacao-screen');
+
+            if (tela === 'recuperar') {
+                telaCadastro.classList.add('hidden');
+                telaRecuperacao.classList.remove('hidden');
+            } else {
+                telaRecuperacao.classList.add('hidden');
+                telaCadastro.classList.remove('hidden');
+            }
+        }
+    </script>
 
 </body>
 </html>
